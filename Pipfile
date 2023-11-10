@@ -15,7 +15,7 @@ flask-migrate = "*"
 marshmallow-sqlalchemy = "*"
 flask-jwt-extended = "*"
 gunicorn = "*"
-psycopg2-binary = "*"
+psycopg2 = "*"
 
 [dev-packages]
 
