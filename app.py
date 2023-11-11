@@ -11,7 +11,6 @@ load_dotenv()
  
 app = Flask(__name__)
 
-#load environment variables
 
  # Load configuration based on the environment (development or production)
  # #Change to ProductionConfig/DevelopmentConfig
@@ -19,9 +18,9 @@ app.config.from_object('config.DevelopmentConfig')
 
 CORS(app, supports_credentials=True)
 
-db.init_app(app)   
-with app.app_context():
-    db.create_all()
+#db.init_app(app)   
+#with app.app_context():
+#   db.create_all()
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://pgqulwdclzedha:48eb104fc363ee75a99131a6b684b36758bc7fbaf87d0f8490652749b1edebd3@ec2-44-215-40-87.compute-1.amazonaws.com:5432/dc0egqt2llo2uo'
 app.config['JWT_SECRET_KEY'] = 'your_secret_key'
