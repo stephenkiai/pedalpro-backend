@@ -1,10 +1,10 @@
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 from datetime import datetime
-from app import db
+#from app import db
 
 ma = Marshmallow()
-#db = SQLAlchemy()
+db = SQLAlchemy()
 
 class RideParticipants(db.Model):
     __tablename__ = 'ride_participants'
