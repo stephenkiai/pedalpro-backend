@@ -3,7 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 import os
 from dotenv import load_dotenv
-from models import db
+#from models import db
 from flask_jwt_extended import JWTManager
 import psycopg2
 
