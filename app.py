@@ -1,5 +1,4 @@
 from flask import Flask
-from flask_marshmallow import Marshmallow
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 import os
@@ -12,9 +11,6 @@ load_dotenv()
  
 app = Flask(__name__)
 
-
- # Load configuration based on the environment (development or production)
- # #Change to ProductionConfig/DevelopmentConfig
 app.config.from_object('config.DevelopmentConfig')
 
 CORS(app, supports_credentials=True)
