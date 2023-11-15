@@ -51,7 +51,7 @@ PedalPro is a platform that allows users to organize and participate in bike rid
 The application will be available at http://localhost:5000.
 ```
 ### Usage
-
+```
 User Registration:
 
     Use the /register endpoint to create a new user account.
@@ -91,10 +91,10 @@ View Live Rides:
     Example:
 
 curl -H "Authorization: Bearer YOUR_ACCESS_TOKEN" http://localhost:5000/ride/live
-
+```
 
 ### API Documentation
-
+```
 User Registration (POST):
 
     Endpoint: /register
@@ -219,10 +219,12 @@ View Live Rides (GET):
   },
   // More live rides...
 ]
-
+```
 
 ### Contributing
-We welcome contributions from the community! If you'd like to contribute to the PedalPro project, please follow these guidelines:
+```
+We welcome contributions from the community! If you'd like to contribute to
+the PedalPro project, please follow these guidelines:
 
     Fork the repository on GitHub.
     Clone your forked repository (git clone https://github.com/stephenkiai/pedalpro-backend.git).
@@ -231,3 +233,4 @@ We welcome contributions from the community! If you'd like to contribute to the 
     Push your changes to your forked repository (git push origin feature/your-feature).
     Create a pull request on the main repository.
 
+```
