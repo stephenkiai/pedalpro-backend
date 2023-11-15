@@ -1,3 +1,4 @@
+""" views/routes for the ride blueprint """
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required
 from models import db, Users, Ride, RideParticipants
@@ -5,11 +6,15 @@ from datetime import datetime
 import uuid
 
 
+""" Flask Blueprint for ride-related routes """
 ride_bp = Blueprint('ride', __name__, url_prefix="/ride")
 
+
+# Route to create a new ride
 @ride_bp.route('/create', methods=['POST'])
 #@jwt_required()
 def create_ride():
+    """ Extract ride data from the request JSON """
     data = request.get_json()
 
     name = data.get('name')
@@ -19,7 +24,7 @@ def create_ride():
 
     if name and location and distance and start_datetime:
         try:
-            # Ensure correct format 'DD/MM/YYYY HH:MM:SS'
+            """ Ensure correct format 'DD/MM/YYYY HH:MM:SS' """
             formatted_start_datetime = datetime.strptime(start_datetime, '%m/%d/%Y %H:%M:%S').strftime('%Y-%m-%d %H:%M:%S')
 
             ride_id = str(uuid.uuid4())
@@ -34,11 +39,13 @@ def create_ride():
 
 
 
+# Route to join a ride
 @ride_bp.route('/join/<string:ride_id>', methods=['POST'])
 #@jwt_required()
 def join_ride(ride_id):
+    """ Extract ride data from the request JSON """
     data = request.get_json()
-    user_id = data.get('user_id')  # Get the user's ID
+    user_id = data.get('user_id')
 
     ride = Ride.query.get(ride_id)
     user = Users.query.get(user_id)
@@ -52,13 +59,32 @@ def join_ride(ride_id):
 
 
 
+# Route to get all rides
 @ride_bp.route('/all', methods=['GET'])
 #@jwt_required()
 def all_rides():
-    # Retrieve all rides from the database
+    """ Retrieve all rides from the database """
     rides = Ride.query.all()
 
-    # Convert to a list of dictionaries
+    """ Convert to a list of dictionaries """
+    rides_data = [{"id": ride.id,
+                   "name": ride.name,
+                   "location": ride.location,
+                   "distance": ride.distance,
+                   "start_datetime": ride.start_datetime.strftime('%Y-%m-%d %H:%M:%S')} for ride in rides]
+
+    return jsonify(rides_data), 200
+
+# route to get live rides
+@ride_bp.route('/live', methods=['GET'])
+#@jwt_required()
+def live_rides():
+    """ Retrieve live rides from the database (rides with start_datetime in the past) """
+    current_datetime = datetime.utcnow()
+
+    rides = Ride.query.filter(Ride.start_datetime <= current_datetime).all()
+
+    """ Convert to a list of dictionaries """
     rides_data = [{"id": ride.id,
                    "name": ride.name,
                    "location": ride.location,
@@ -68,17 +94,18 @@ def all_rides():
     return jsonify(rides_data), 200
 
 
+# Route to get ride details by ID
 @ride_bp.route('/view/<string:ride_id>', methods=['GET'])
 #@jwt_required()
 def get_ride_by_id(ride_id):
-    # Retrieve the ride by its ID from the database
+    """ Retrieve the ride by its ID from the database """
     ride = Ride.query.get(ride_id)
 
     if ride is not None:
-        # Query participants for the ride
+        """ Query participants for the ride """
         participants = RideParticipants.query.filter_by(ride_id=ride_id).all()
 
-        # Calculate the participant count
+        """ Calculate the participant count """
         participant_count = len(participants)
 
         ride_data = {
@@ -96,13 +123,14 @@ def get_ride_by_id(ride_id):
         return jsonify({"error": "Ride not found"}), 404
 
 
+# Route to get ride participants by ride-ID
 @ride_bp.route('/view/<string:ride_id>/participants', methods=['GET'])
 #@jwt_required()
 def get_ride_participants(ride_id):
-    # Query participants for the ride
+    """ Query participants for the ride """
     participants = RideParticipants.query.filter_by(ride_id=ride_id).all()
 
-    # list to store participant data
+    """ list to store participant data """
     participant_data = []
     for participant in participants:
         user = Users.query.get(participant.user_id)
@@ -119,15 +147,15 @@ def get_ride_participants(ride_id):
     return jsonify(participant_data), 200
 
 
-
+# Route to delete a ride by ID
 @ride_bp.route('/delete/<string:ride_id>', methods=['DELETE'])
 #@jwt_required()
 def delete_ride(ride_id):
-    # Retrieve ride by its ID from database
+    """ Retrieve ride by its ID from database """
     ride = Ride.query.get(ride_id)
 
     if ride is not None:
-        # Delete the ride from the database
+        """ Delete the ride from the database """
         db.session.delete(ride)
         db.session.commit()
         return jsonify({"message": "Ride deleted successfully"}), 200
