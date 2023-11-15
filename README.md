@@ -2,6 +2,9 @@
 
 ## The PedalPro project, a platform for organizing and joining bike rides
 
+![Screenshot from 2023-11-15 22-05-45](https://github.com/stephenkiai/pedalpro-backend/assets/123061554/2fb03288-5e7b-4137-91f4-1bfe195da1b0)
+
+
 ## Table of Contents
 - [Introduction](#introduction)
 - [Features](#features)
